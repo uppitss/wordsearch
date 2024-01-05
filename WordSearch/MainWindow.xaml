@@ -1,0 +1,87 @@
+﻿<Window x:Class="WordSearch.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WordSearch"
+        mc:Ignorable="d"
+        Title="Угадыватель слов" Height="450" Width="800">
+    <Window.Resources>
+        <Style TargetType="Label">
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="DefaultTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+       
+        <Style x:Key="CustomErrorControlOnErrorStyle" TargetType="TextBox" BasedOn="{StaticResource DefaultTextBoxStyle}">
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <StackPanel>
+                            <AdornedElementPlaceholder x:Name="placeholder" />
+                            <TextBlock FontSize="11" FontStyle="Italic" Foreground="Red"
+                                       Text="{Binding ElementName=placeholder, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}" />
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <DockPanel>
+    <Menu DockPanel.Dock="Top">
+        <MenuItem Header="Добавить слово" Command="{Binding AddNewWord}" />
+    </Menu>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="10"></RowDefinition>
+            
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label Content="Маска слова:" Grid.RowSpan="2" VerticalAlignment="Top"  />
+        <TextBox Text="{Binding Word, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}" 
+                 IsEnabled="{Binding IsEnabled}"
+                 Grid.Row="0" Grid.Column="1"
+                 Style="{StaticResource CustomErrorControlOnErrorStyle}"/>
+        <Label Grid.Row="1" Grid.Column="1" Content="Вместо неизвестных букв ставьте знак *"/>
+
+        <Label Content="Этих букв нет в слове:" Grid.Row="3" Grid.RowSpan="2" />
+        <TextBox Text="{Binding NotInWordChars, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"  
+                 Grid.Row="3" Grid.Column="1"
+                 IsEnabled="{Binding IsEnabled}"
+                 Style="{StaticResource CustomErrorControlOnErrorStyle}"/>
+        <Label Grid.Row="4" Grid.Column="1" Content="По одной букве через запятую. Пример: а,б,в,г"/>
+
+        <Label Content="Эти буквы есть в слове:" Grid.Row="6" Grid.RowSpan="2" />
+        <TextBox Text="{Binding InWordChars, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"  
+                 Grid.Row="6" Grid.Column="1"
+                 IsEnabled="{Binding IsEnabled}"
+                 Style="{StaticResource CustomErrorControlOnErrorStyle}"/>
+        <Label Grid.Row="7" Grid.Column="1" Content="По одной букве через запятую. Пример: к,л,м,н"/>
+
+        <Button Grid.Row="9" Content="Найти слова" Grid.ColumnSpan="2" Command="{Binding SearchWords}" />
+
+        <ListView Grid.Row="11" Grid.ColumnSpan="2" ItemsSource="{Binding WordsList}"></ListView>
+    </Grid>
+    </DockPanel>
+</Window>
