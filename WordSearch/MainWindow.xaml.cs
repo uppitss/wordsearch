@@ -26,24 +26,9 @@ namespace WordSearch
         {            
          
             InitializeComponent();
-            viewModel = new MainWindowViewModel();
-            viewModel.OnAddNewWord += ViewModel_OnAddNewWord;
+            viewModel = new MainWindowViewModel();       
             DataContext = viewModel;
             
-        }
-
-        private void ViewModel_OnAddNewWord(object? sender, OnAddNewWordEventArgs e)
-        {         
-            Window wnd = new Window();
-            wnd.Owner = this;
-            wnd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            wnd.SizeToContent = SizeToContent.WidthAndHeight;
-
-            wnd.Title = "Добавить новое слово";
-            wnd.Closed += Wnd_Closed;
-            var control = new AddNewWord(wnd,e.DbService);            
-            wnd.Content = control;
-            wnd.ShowDialog();
         }
 
         private void Wnd_Closed(object? sender, EventArgs e)

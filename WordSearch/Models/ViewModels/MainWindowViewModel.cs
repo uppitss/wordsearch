@@ -21,6 +21,16 @@ namespace WordSearch.Models.ViewModels
     {
         protected IDB _dbService;
         protected bool _isEnabled;
+        protected List<Letter> _letters;
+        public List<Letter> Letters
+        {
+            get { return _letters; }
+            set
+            {
+                _letters = value;
+                RaisePropertyChanged("Letters");
+            }
+        }
         public bool IsEnabled
         {
             get
@@ -110,7 +120,60 @@ namespace WordSearch.Models.ViewModels
         {
             IsEnabled = true;
             _dbService = DBFactory.GetDBInstance(false);
+            AddLetters();
+           
         }
+        #region Letters Functions
+        protected void AddLetters()
+        {
+            List<Letter> letters = new List<Letter>();
+            letters.Add(AddLetter("A"));
+            letters.Add(AddLetter("Б"));
+            letters.Add(AddLetter("В"));
+            letters.Add(AddLetter("Г"));
+            letters.Add(AddLetter("Д"));
+            letters.Add(AddLetter("Е"));
+            letters.Add(AddLetter("Ё"));
+            letters.Add(AddLetter("Ж"));
+            letters.Add(AddLetter("З"));
+            letters.Add(AddLetter("И"));
+            letters.Add(AddLetter("Й"));
+            letters.Add(AddLetter("К"));
+            letters.Add(AddLetter("Л"));
+            letters.Add(AddLetter("М"));
+            letters.Add(AddLetter("Н"));
+            letters.Add(AddLetter("О"));
+            letters.Add(AddLetter("П"));
+            letters.Add(AddLetter("Р"));
+            letters.Add(AddLetter("С"));
+            letters.Add(AddLetter("Т"));
+            letters.Add(AddLetter("У"));
+            letters.Add(AddLetter("Ф"));
+            letters.Add(AddLetter("Х"));
+            letters.Add(AddLetter("Ц"));
+            letters.Add(AddLetter("Ч"));
+            letters.Add(AddLetter("Ш"));
+            letters.Add(AddLetter("Щ"));
+            letters.Add(AddLetter("Ъ"));
+            letters.Add(AddLetter("Ь"));
+            letters.Add(AddLetter("Ы"));
+            letters.Add(AddLetter("Э"));
+            letters.Add(AddLetter("Ю"));
+            letters.Add(AddLetter("Я"));
+            Letters = letters;
+        }
+        protected Letter AddLetter(string letter)
+        {
+            var l = new Letter(letter);
+            l.OnChangeStatus += AddLetter_OnChangeStatus;
+            return l;
+        }
+
+        private void AddLetter_OnChangeStatus(object? sender, LetterEventArgs e)
+        {
+            int i = 0;
+        }
+        #endregion Letters Functions
         #region Commands
         public bool CanSearchWordsExecute()
         {
@@ -133,19 +196,7 @@ namespace WordSearch.Models.ViewModels
                 return new RelayCommand(SearchWordsExecute, CanSearchWordsExecute);
             }
         }
-
-        public void AddNewWordExecute()
-        {
-            OnAddNewWord?.Invoke(this, new OnAddNewWordEventArgs(_dbService));
-        }
-        public ICommand AddNewWord
-        {
-            get
-            {
-                return new RelayCommand(AddNewWordExecute);
-            }
-        }
-        public event EventHandler<OnAddNewWordEventArgs> OnAddNewWord;
+        
         #endregion
 
         #region IDataErrorInfo
@@ -234,12 +285,5 @@ namespace WordSearch.Models.ViewModels
         }
         #endregion
     }
-    public class OnAddNewWordEventArgs : EventArgs
-    {
-        public IDB DbService { get; set; }
-        public OnAddNewWordEventArgs(IDB dbService)
-        {
-            DbService = dbService;
-        }
-    }
+ 
 }

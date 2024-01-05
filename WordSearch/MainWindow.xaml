@@ -32,10 +32,7 @@
         </Style>
     </Window.Resources>
     <DockPanel>
-    <Menu DockPanel.Dock="Top">
-        <MenuItem Header="Добавить слово" Command="{Binding AddNewWord}" />
-    </Menu>
-    <Grid>
+        <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
@@ -55,8 +52,9 @@
 
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="10"></RowDefinition>
-            
-            <RowDefinition Height="*"></RowDefinition>
+
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Label Content="Маска слова:" Grid.RowSpan="2" VerticalAlignment="Top"  />
         <TextBox Text="{Binding Word, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}" 
@@ -81,7 +79,15 @@
 
         <Button Grid.Row="9" Content="Найти слова" Grid.ColumnSpan="2" Command="{Binding SearchWords}" />
 
-        <ListView Grid.Row="11" Grid.ColumnSpan="2" ItemsSource="{Binding WordsList}"></ListView>
+            <ItemsControl Grid.ColumnSpan="2" ItemsSource="{Binding Letters}" Grid.Row="11">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+            
+        <ListView Grid.Row="12" Grid.ColumnSpan="2" ItemsSource="{Binding WordsList}"></ListView>
     </Grid>
     </DockPanel>
 </Window>

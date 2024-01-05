@@ -1,5 +1,4 @@
-﻿using Services.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,24 +17,23 @@ using WordSearch.Models.ViewModels;
 namespace WordSearch
 {
     /// <summary>
-    /// Interaction logic for AddNewWord.xaml
+    /// Interaction logic for Letter.xaml
     /// </summary>
-    public partial class AddNewWord : UserControl
+    public partial class Letter : UserControl
     {
-        protected Window _parentWnd;
-        protected AddNewWordViewModel viewModel;
-        public AddNewWord(Window parentWnd, IDB dbService)
+        LetterViewModel viewModel;
+        public event EventHandler<LetterEventArgs> OnChangeStatus;
+        public Letter(string letter)
         {
+            viewModel = new LetterViewModel(letter);
+            viewModel.OnChangeStatus += ViewModel_OnChangeStatus;
             InitializeComponent();
-            viewModel = new AddNewWordViewModel(dbService);
-            viewModel.OnAddNewWord += ViewModel_OnAddNewWord;
             this.DataContext = viewModel;
-            _parentWnd = parentWnd;
         }
 
-        private void ViewModel_OnAddNewWord(object? sender, EventArgs e)
+        private void ViewModel_OnChangeStatus(object? sender, LetterEventArgs e)
         {
-            _parentWnd.Close();
+            OnChangeStatus?.Invoke(this, e);
         }
     }
 }
