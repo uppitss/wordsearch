@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 namespace Services.Interfaces
 {
     public interface IDB
-    {
-        public bool Add(string word);
+    {        
         public string[] Search(string wordMask);
     }
 }

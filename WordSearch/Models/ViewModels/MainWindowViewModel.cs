@@ -53,55 +53,11 @@ namespace WordSearch.Models.ViewModels
                 RaisePropertyChanged("Word");
             }
         }
+               
+        protected List<string> _notInWordChars { get; set; }
 
-        private string _notInWordChars;
-        public string NotInWordChars
-        {
-            get
-            {
-                return _notInWordChars;
-            }
-            set
-            {
-                _notInWordChars = value;
-                RaisePropertyChanged("NotInWordChars");
-            }
-        }
-        public string[] NotInWordCharsArr
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(NotInWordChars))
-                {
-                    return NotInWordChars.Replace(" ", "").Split(',').ToArray();
-                }
-                return new string[] { };
-            }
-        }
-        private string _inWordChars;
-        public string InWordChars
-        {
-            get
-            {
-                return _inWordChars;
-            }
-            set
-            {
-                _inWordChars = value;
-                RaisePropertyChanged("InWordChars");
-            }
-        }
-        public string[] InWordCharsArr
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(InWordChars))
-                {
-                    return InWordChars.Replace(" ", "").Split(',').ToArray();
-                }
-                return new string[] { };
-            }
-        }
+        protected List<string> _inWordChars { get; set; }
+        
 
         protected ObservableCollection<string> _wordsList;
         public ObservableCollection<string> WordsList
@@ -119,15 +75,16 @@ namespace WordSearch.Models.ViewModels
         public MainWindowViewModel()
         {
             IsEnabled = true;
-            _dbService = DBFactory.GetDBInstance(false);
+            _dbService = DBFactory.GetDBInstance(false);            
+            _notInWordChars = new List<string>();
+            _inWordChars = new List<string>();
             AddLetters();
-           
         }
         #region Letters Functions
         protected void AddLetters()
         {
             List<Letter> letters = new List<Letter>();
-            letters.Add(AddLetter("A"));
+            letters.Add(AddLetter("А"));
             letters.Add(AddLetter("Б"));
             letters.Add(AddLetter("В"));
             letters.Add(AddLetter("Г"));
@@ -171,7 +128,23 @@ namespace WordSearch.Models.ViewModels
 
         private void AddLetter_OnChangeStatus(object? sender, LetterEventArgs e)
         {
-            int i = 0;
+            int inWordIndex = _inWordChars.FindIndex(p=>p == e.Letter.ToLower());
+            int notInWordIndex = _notInWordChars.FindIndex(p => p == e.Letter.ToLower());
+
+            if (inWordIndex != -1)
+            {
+                _inWordChars.Remove(e.Letter.ToLower());
+            }
+            if (notInWordIndex != -1)
+            {
+                _notInWordChars.Remove(e.Letter.ToLower());
+            }
+
+            switch (e.Status)
+            {
+                case LetterStatus.InWord: _inWordChars.Add(e.Letter.ToLower()); break;
+                case LetterStatus.NotInWord: _notInWordChars.Add(e.Letter.ToLower()); break;
+            }
         }
         #endregion Letters Functions
         #region Commands
@@ -185,7 +158,7 @@ namespace WordSearch.Models.ViewModels
             if (!IsError)
             {
                 IsEnabled = false;
-                WordsList = new ObservableCollection<string>(await new SearchWordsService().SearchWords(_dbService, Word, InWordCharsArr, NotInWordCharsArr));
+                WordsList = new ObservableCollection<string>(await new SearchWordsService().SearchWords(_dbService, Word, _inWordChars.ToArray(),_notInWordChars.ToArray()));
                 IsEnabled = true;
             }
         }
@@ -207,8 +180,6 @@ namespace WordSearch.Models.ViewModels
             IsError = false;
             UseImmediateValidation = true;
             RaisePropertyChanged("Word");
-            RaisePropertyChanged("NotInWordChars");
-            RaisePropertyChanged("InWordChars");
         }
         public string Error
         {
@@ -242,37 +213,7 @@ namespace WordSearch.Models.ViewModels
                                     }
                                 }
                             }
-                            break;
-                        case "NotInWordChars":
-                            {
-                                if (!string.IsNullOrEmpty(NotInWordChars))
-                                {
-                                    var arr = NotInWordChars.Replace(" ", "").Split(',');
-                                    foreach (var item in NotInWordChars.Replace(" ", "").Split(','))
-                                    {
-                                        if (!Regex.IsMatch(item.ToLower(), "^[а-я]*$"))
-                                        {
-                                            msg = "Неверный формат строки";
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                        case "InWordChars":
-                            {
-                                if (!string.IsNullOrEmpty(InWordChars))
-                                {
-                                    var arr = InWordChars.Replace(" ", "").Split(',');
-                                    foreach (var item in InWordChars.Replace(" ", "").Split(','))
-                                    {
-                                        if (!Regex.IsMatch(item.ToLower(), "^[а-я]*$"))
-                                        {
-                                            msg = "Неверный формат строки";
-                                        }
-                                    }
-                                }
-                            }
-                            break;
+                            break;                       
 
                     }
                     if (IsError == false && !string.IsNullOrEmpty(msg))

@@ -63,26 +63,12 @@
                  Style="{StaticResource CustomErrorControlOnErrorStyle}"/>
         <Label Grid.Row="1" Grid.Column="1" Content="Вместо неизвестных букв ставьте знак *"/>
 
-        <Label Content="Этих букв нет в слове:" Grid.Row="3" Grid.RowSpan="2" />
-        <TextBox Text="{Binding NotInWordChars, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"  
-                 Grid.Row="3" Grid.Column="1"
-                 IsEnabled="{Binding IsEnabled}"
-                 Style="{StaticResource CustomErrorControlOnErrorStyle}"/>
-        <Label Grid.Row="4" Grid.Column="1" Content="По одной букве через запятую. Пример: а,б,в,г"/>
-
-        <Label Content="Эти буквы есть в слове:" Grid.Row="6" Grid.RowSpan="2" />
-        <TextBox Text="{Binding InWordChars, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"  
-                 Grid.Row="6" Grid.Column="1"
-                 IsEnabled="{Binding IsEnabled}"
-                 Style="{StaticResource CustomErrorControlOnErrorStyle}"/>
-        <Label Grid.Row="7" Grid.Column="1" Content="По одной букве через запятую. Пример: к,л,м,н"/>
-
         <Button Grid.Row="9" Content="Найти слова" Grid.ColumnSpan="2" Command="{Binding SearchWords}" />
 
             <ItemsControl Grid.ColumnSpan="2" ItemsSource="{Binding Letters}" Grid.Row="11">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel />
+                        <WrapPanel Margin="5" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>

@@ -21,16 +21,7 @@ namespace Services
         }
         public MockDBService()
         {
-            _words = new List<string> { "топор", "аванс", "бекас","техас", "вихрь", "грамм", "девка" };
-        }
-        public bool Add(string word)
-        {
-            if (!_words.Contains(word.ToLower()))
-            {
-                _words.Add(word.ToLower());
-                return true;
-            }
-            return false;
+            _words = new List<string> { "топор", "аванс", "бекас","техас", "вихрь", "грамм", "деталь" };
         }
 
         public string[] Search(string wordMask)

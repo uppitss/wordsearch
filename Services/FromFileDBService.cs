@@ -10,11 +10,6 @@ namespace Services
 {
     public class FromFileDBService : IDB
     {
-        public bool Add(string word)
-        {
-            throw new NotImplementedException();
-        }
-
         public string[] Search(string wordMask)
         {
             List<string> allWords = new List<string>();
