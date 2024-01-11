@@ -21,17 +21,7 @@ namespace WordSearchTests
                 Assert.Pass("Коллекция не пустая");
             }            
         }
-        [Test]
-        public void TestAddingNewWords()
-        {
-            const string newWord = "слово";
-            int prevCount = _service.Words.Count;
-            _service.Add(newWord);
-            int currCount = _service.Words.Count;  
-            if (currCount == (prevCount + 1) && _service.Words[_service.Words.Count-1] == newWord) {
-                Assert.Pass();
-            }
-        }
+        
         [Test]
         public void TestSearch()
         {

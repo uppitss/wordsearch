@@ -91,6 +91,10 @@ namespace WordSearch.Models.ViewModels
         }
 
         #endregion
+        public void Clear()
+        {
+            Status = LetterStatus.Neutral;
+        }
     }
     public class LetterEventArgs : EventArgs
     {

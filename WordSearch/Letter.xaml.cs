@@ -35,5 +35,9 @@ namespace WordSearch
         {
             OnChangeStatus?.Invoke(this, e);
         }
+        public void Clear()
+        {
+            viewModel.Clear();
+        }
     }
 }

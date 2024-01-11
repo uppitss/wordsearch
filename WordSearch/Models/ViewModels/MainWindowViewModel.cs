@@ -43,6 +43,7 @@ namespace WordSearch.Models.ViewModels
                 RaisePropertyChanged("IsEnabled");
             }
         }
+        
         private string _word;
         public string Word
         {
@@ -50,7 +51,7 @@ namespace WordSearch.Models.ViewModels
             set
             {
                 _word = value;
-                RaisePropertyChanged("Word");
+                RaisePropertyChanged("Word");                
             }
         }
                
@@ -144,10 +145,36 @@ namespace WordSearch.Models.ViewModels
             {
                 case LetterStatus.InWord: _inWordChars.Add(e.Letter.ToLower()); break;
                 case LetterStatus.NotInWord: _notInWordChars.Add(e.Letter.ToLower()); break;
-            }
+            }            
         }
         #endregion Letters Functions
         #region Commands
+
+        public bool CanClearExecute()
+        {
+            return !String.IsNullOrEmpty(Word) || _inWordChars.Count() > 0 || _notInWordChars.Count > 0;
+        }
+        public void ClearExecute()
+        {
+            UseImmediateValidation = false;
+            Word = String.Empty;
+            _inWordChars = new List<string>();
+            _notInWordChars = new List<string>();
+            foreach (var letter in Letters)
+            {
+                letter.Clear();
+            }
+            WordsList = new ObservableCollection<string>();
+            
+
+        }
+        public ICommand Clear
+        {
+            get
+            {
+                return new RelayCommand(ClearExecute, CanClearExecute);
+            }
+        }
         public bool CanSearchWordsExecute()
         {
             return IsEnabled;
